@@ -26,7 +26,7 @@
                     <input type="date" name="deadline" class="form-control" required>
                 </div>
 
-                <button class="btn btn-success">Simpan</button>
+                <button type="submit" class="btn btn-success">Simpan</button>
                 <a href="{{ route('todolist.index') }}" class="btn btn-secondary">Kembali</a>
 
             </form>

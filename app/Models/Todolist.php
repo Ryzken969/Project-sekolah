@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Task; // WAJIB agar relasi dikenali
+use App\Models\Task; // agar relasi tasks dikenali
 
 class Todolist extends Model
 {
     use HasFactory;
 
-    // Kolom yang boleh diisi (fillable)
+    // Kolom yang boleh diisi
     protected $fillable = [
         'judul',
         'deadline',
