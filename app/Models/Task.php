@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Todolist;
 
 class Task extends Model
 {
@@ -15,6 +16,7 @@ class Task extends Model
         'status'
     ];
 
+    // 1 Task milik 1 Todolist
     public function todolist()
     {
         return $this->belongsTo(Todolist::class);

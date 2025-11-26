@@ -12,9 +12,7 @@ class TodolistController extends Controller
      */
     public function index()
     {
-        // Gunakan satu variabel yang konsisten: $todolist
         $todolist = Todolist::with('tasks')->get();
-
         return view('todolist.index', compact('todolist'));
     }
 
@@ -32,16 +30,17 @@ class TodolistController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required',
+            'judul'    => 'required',
             'deadline' => 'required|date'
         ]);
 
         Todolist::create([
-            'judul' => $request->judul,
+            'judul'    => $request->judul,
             'deadline' => $request->deadline
         ]);
 
-        return redirect()->route('todolist.index')->with('success', 'Daftar berhasil ditambahkan');
+        return redirect()->route('todolist.index')
+            ->with('success', 'Daftar berhasil ditambahkan');
     }
 
     /**
@@ -50,7 +49,6 @@ class TodolistController extends Controller
     public function show($id)
     {
         $list = Todolist::with('tasks')->findOrFail($id);
-
         return view('todolist.show', compact('list'));
     }
 
@@ -60,7 +58,6 @@ class TodolistController extends Controller
     public function edit($id)
     {
         $todolist = Todolist::findOrFail($id);
-
         return view('todolist.edit', compact('todolist'));
     }
 
@@ -70,18 +67,18 @@ class TodolistController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul' => 'required',
+            'judul'    => 'required',
             'deadline' => 'required|date'
         ]);
 
         $todolist = Todolist::findOrFail($id);
-
         $todolist->update([
-            'judul' => $request->judul,
+            'judul'    => $request->judul,
             'deadline' => $request->deadline
         ]);
 
-        return redirect()->route('todolist.index')->with('success', 'Daftar berhasil diupdate');
+        return redirect()->route('todolist.index')
+            ->with('success', 'Daftar berhasil diupdate');
     }
 
     /**
@@ -89,9 +86,10 @@ class TodolistController extends Controller
      */
     public function destroy($id)
     {
-        $list = Todolist::findOrFail($id);
-        $list->delete();
+        $todolist = Todolist::findOrFail($id);
+        $todolist->delete();
 
-        return redirect()->route('todolist.index')->with('success', 'Daftar berhasil dihapus');
+        return redirect()->route('todolist.index')
+            ->with('success', 'Daftar berhasil dihapus');
     }
 }
