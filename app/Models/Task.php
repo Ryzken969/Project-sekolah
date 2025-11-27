@@ -10,6 +10,7 @@ class Task extends Model
 {
     use HasFactory;
 
+    // Kolom yang boleh diisi
     protected $fillable = [
         'todolist_id',
         'nama',

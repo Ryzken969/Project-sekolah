@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     /**
-     * Simpan task baru
+     * SIMPAN TASK BARU
      */
     public function store(Request $request)
     {
         $request->validate([
             'todolist_id' => 'required|exists:todolists,id',
-            'nama'        => 'required'
+            'nama'        => 'required|string|min:1'
         ]);
 
         Task::create([
@@ -27,11 +27,12 @@ class TaskController extends Controller
     }
 
     /**
-     * Hapus task
+     * HAPUS TASK
      */
     public function destroy($id)
     {
         Task::findOrFail($id)->delete();
+
         return back()->with('success', 'Task berhasil dihapus');
     }
 }

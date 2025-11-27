@@ -1,30 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TodolistController;
 use App\Http\Controllers\TaskController;
 
-// ========================
-// HALAMAN AWAL
-// ========================
+// Redirect otomatis dari "/" ke "/todolist"
 Route::get('/', function () {
     return redirect()->route('todolist.index');
-    // Kalau mau pakai welcome lagi, ganti dengan:
-    // return view('welcome');
 });
 
-// ========================
-// ROUTE CRUD ITEM
-// ========================
-Route::resource('items', ItemController::class);
-
-// ========================
-// ROUTE CRUD TODOLIST
-// ========================
+// Route CRUD Todolist
 Route::resource('todolist', TodolistController::class);
 
-// ========================
-// ROUTE CRUD TASK
-// ========================
-Route::resource('tasks', TaskController::class);
+// Route Task (hanya tambah & hapus)
+Route::resource('tasks', TaskController::class)->only(['store', 'destroy']);

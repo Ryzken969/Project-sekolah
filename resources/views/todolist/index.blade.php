@@ -8,64 +8,45 @@
 
 <div class="container mt-5">
 
-    <div class="d-flex justify-content-between mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold">📋 Daftar To-Do List</h3>
-        <a href="{{ route('todolist.create') }}" class="btn btn-primary">+ Tambah Daftar</a>
+        <a href="{{ route('todolist.create') }}" class="btn btn-primary">+ Tambah</a>
     </div>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    @if($lists->count() == 0)
+        <div class="card">
+            <div class="card-body text-center text-muted">Belum ada daftar</div>
+        </div>
+    @else
+        <div class="row g-3">
+            @foreach($lists as $list)
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $list->judul }}</h5>
+                            <p class="card-text text-muted mb-2">
+                                Deadline: {{ \Carbon\Carbon::parse($list->deadline)->format('d M Y') }}
+                            </p>
 
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr class="text-center">
-                        <th width="60">ID</th>
-                        <th>Judul</th>
-                        <th>Deadline</th>
-                        <th width="180">Aksi</th>
-                    </tr>
-                </thead>
+                            <a href="{{ route('todolist.show', $list->id) }}" class="btn btn-info btn-sm">Detail</a>
+                            <a href="{{ route('todolist.edit', $list->id) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                <tbody>
-                    @forelse($todolist as $list)
-                    <tr>
-                        <td class="text-center">{{ $list->id }}</td>
-                        <td>{{ $list->judul }}</td>
-                        <td>{{ $list->deadline }}</td>
-                        <td class="text-center">
-                            <a href="{{ route('todolist.show', $list->id) }}"
-                               class="btn btn-info btn-sm text-white">Detail</a>
-
-                            <a href="{{ route('todolist.edit', $list->id) }}"
-                               class="btn btn-warning btn-sm text-white">Edit</a>
-
-                            <form action="{{ route('todolist.destroy', $list->id) }}"
-                                  method="POST" class="d-inline">
+                            <form action="{{ route('todolist.destroy', $list->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button onclick="return confirm('Hapus daftar ini?')"
-                                        class="btn btn-danger btn-sm">
-                                    Hapus
-                                </button>
+                                    class="btn btn-danger btn-sm">Hapus</button>
                             </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="4" class="text-center text-muted">
-                            Belum ada daftar
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
-    </div>
+    @endif
 
 </div>
 

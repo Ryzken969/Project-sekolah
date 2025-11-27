@@ -5,64 +5,55 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
 <div class="container mt-5">
 
-    <h3 class="fw-bold mb-4">📄 Detail To-do List</h3>
+    <h3 class="fw-bold mb-3">📄 Detail</h3>
 
-    <div class="card shadow-sm">
+    <div class="card mb-3 shadow-sm">
         <div class="card-body">
+            <h5>{{ $list->judul }}</h5>
+            <p class="text-muted">Deadline: {{ \Carbon\Carbon::parse($list->deadline)->format('d M Y') }}</p>
+        </div>
+    </div>
 
-            <h4>{{ $list->judul }}</h4>
-            <p class="text-muted">Deadline: <strong>{{ $list->deadline }}</strong></p>
-
-            <hr>
-
-            {{-- FORM TAMBAH TASK --}}
-            <form action="{{ route('tasks.store') }}" method="POST">
+    {{-- Form tambah task --}}
+    <div class="card mb-3">
+        <div class="card-body">
+            <form action="{{ route('tasks.store') }}" method="POST" class="d-flex gap-2">
                 @csrf
                 <input type="hidden" name="todolist_id" value="{{ $list->id }}">
-
-                <div class="input-group mb-3">
-                    <input type="text" name="nama" class="form-control" placeholder="Tambah task" required>
-                    <button class="btn btn-primary">Tambah</button>
-                </div>
+                <input type="text" name="nama" class="form-control" placeholder="Tambah task..." required>
+                <button class="btn btn-primary">Tambah</button>
             </form>
+        </div>
+    </div>
 
-            {{-- DAFTAR TASK --}}
-            <h5 class="fw-bold">Daftar Task</h5>
+    {{-- Daftar task --}}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h6 class="mb-3">Daftar Task</h6>
 
             @if($list->tasks->count() == 0)
                 <p class="text-muted">Belum ada task.</p>
             @else
-                <ul class="list-group mb-3">
+                <ul class="list-group">
                     @foreach($list->tasks as $task)
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             {{ $task->nama }}
-
-                            <div>
-                                <span class="badge {{ $task->status ? 'bg-success' : 'bg-secondary' }}">
-                                    {{ $task->status ? 'Selesai' : 'Belum' }}
-                                </span>
-
-                                <form action="{{ route('tasks.destroy', $task->id) }}"
-                                      method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger btn-sm ms-2">X</button>
-                                </form>
-                            </div>
+                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="mb-0">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm">X</button>
+                            </form>
                         </li>
                     @endforeach
                 </ul>
             @endif
 
-            <a href="{{ route('todolist.index') }}" class="btn btn-secondary">⬅ Kembali</a>
-
+            <a href="{{ route('todolist.index') }}" class="btn btn-secondary mt-3">Kembali</a>
         </div>
     </div>
 
 </div>
-
 </body>
 </html>

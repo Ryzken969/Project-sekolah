@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('todolists', function (Blueprint $table) {
             $table->id();
-            $table->string('judul');        // benar → sesuai controller
-            $table->date('deadline');       // benar → sesuai controller
+            $table->string('judul');     // dari kode pertama
+            $table->date('deadline');   // dari kode pertama
             $table->timestamps();
         });
     }

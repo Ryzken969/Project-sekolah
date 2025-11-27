@@ -11,10 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+
+            // Relasi ke todolists
+            $table->foreignId('todolist_id')
+                  ->constrained()
+                  ->cascadeOnDelete();
+
             $table->string('nama');
-            $table->string('file')->nullable();
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }
@@ -24,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('tasks');
     }
 };
