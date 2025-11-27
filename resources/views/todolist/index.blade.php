@@ -1,53 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Daftar To-Do List</title>
+    <title>My Tasks</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
-<div class="container mt-5">
+<nav class="navbar navbar-expand-lg bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold">Dashboard</a>
+        <a href="{{ route('todolist.index') }}" class="nav-link">My Task</a>
+    </div>
+</nav>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold">📋 Daftar To-Do List</h3>
-        <a href="{{ route('todolist.create') }}" class="btn btn-primary">+ Tambah</a>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between mb-3">
+        <h4>My Tasks</h4>
+        <a href="{{ route('todolist.create') }}" class="btn btn-primary">+ Create New Task</a>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
     @if($lists->count() == 0)
-        <div class="card">
-            <div class="card-body text-center text-muted">Belum ada daftar</div>
+        <div class="text-center mt-5">
+            <h5>No tasks found</h5>
+            <p>Get started by creating your first task.</p>
+            <a href="{{ route('todolist.create') }}" class="btn btn-primary">+ Create Your First Task</a>
         </div>
     @else
-        <div class="row g-3">
-            @foreach($lists as $list)
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $list->judul }}</h5>
-                            <p class="card-text text-muted mb-2">
-                                Deadline: {{ \Carbon\Carbon::parse($list->deadline)->format('d M Y') }}
-                            </p>
-
-                            <a href="{{ route('todolist.show', $list->id) }}" class="btn btn-info btn-sm">Detail</a>
-                            <a href="{{ route('todolist.edit', $list->id) }}" class="btn btn-warning btn-sm">Edit</a>
-
-                            <form action="{{ route('todolist.destroy', $list->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button onclick="return confirm('Hapus daftar ini?')"
-                                    class="btn btn-danger btn-sm">Hapus</button>
-                            </form>
-                        </div>
-                    </div>
+        @foreach($lists as $list)
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5>{{ $list->judul }}</h5>
+                    <p class="text-muted">Deadline: {{ $list->deadline }}</p>
+                    <a href="{{ route('todolist.show', $list->id) }}" class="btn btn-info btn-sm">Detail</a>
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
     @endif
-
 </div>
 
 </body>

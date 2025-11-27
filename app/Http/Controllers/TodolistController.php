@@ -7,74 +7,57 @@ use Illuminate\Http\Request;
 
 class TodolistController extends Controller
 {
-    // INDEX — tampilkan semua daftar
     public function index()
     {
-        // ambil data terbaru dulu
-        $lists = Todolist::with('tasks')->latest()->get();
+        $lists = Todolist::latest()->get();
         return view('todolist.index', compact('lists'));
     }
 
-    // FORM TAMBAH
     public function create()
     {
         return view('todolist.create');
     }
 
-    // STORE
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required|string|max:255',
-            'deadline' => 'required|date',
+            'judul' => 'required',
+            'deadline' => 'required|date'
         ]);
 
-        Todolist::create([
-            'judul' => $request->judul,
-            'deadline' => $request->deadline,
-        ]);
+        $list = Todolist::create($request->all());
 
-        return redirect()->route('todolist.index')->with('success', 'Daftar berhasil ditambahkan');
+        // SETELAH SAVE → LANGSUNG KE CREATE TASK (FLOWCHART)
+        return redirect()->route('todolist.show', $list->id);
     }
 
-    // SHOW (detail + task)
     public function show($id)
     {
         $list = Todolist::with('tasks')->findOrFail($id);
         return view('todolist.show', compact('list'));
     }
 
-    // EDIT
     public function edit($id)
     {
-        $todolist = Todolist::findOrFail($id);
-        return view('todolist.edit', compact('todolist'));
+        $list = Todolist::findOrFail($id);
+        return view('todolist.edit', compact('list'));
     }
 
-    // UPDATE
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul' => 'required|string|max:255',
-            'deadline' => 'required|date',
+            'judul' => 'required',
+            'deadline' => 'required|date'
         ]);
 
-        $t = Todolist::findOrFail($id);
-        $t->update([
-            'judul' => $request->judul,
-            'deadline' => $request->deadline,
-        ]);
+        Todolist::findOrFail($id)->update($request->all());
 
-        return redirect()->route('todolist.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('todolist.index');
     }
 
-    // DESTROY
     public function destroy($id)
     {
-        $t = Todolist::findOrFail($id);
-        $t->tasks()->delete(); // optional: bersihkan tasks
-        $t->delete();
-
-        return redirect()->route('todolist.index')->with('success', 'Data berhasil dihapus');
+        Todolist::findOrFail($id)->delete();
+        return redirect()->route('todolist.index');
     }
 }
