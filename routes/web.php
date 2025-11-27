@@ -9,8 +9,16 @@ Route::get('/', function () {
     return redirect()->route('todolist.index');
 });
 
-// Route CRUD Todolist
+// ============================
+// TODOLIST ROUTES
+// ============================
 Route::resource('todolist', TodolistController::class);
 
-// Route Task (hanya tambah & hapus)
-Route::resource('tasks', TaskController::class)->only(['store', 'destroy']);
+// ============================
+// TASK ROUTES (Hanya Tambah & Hapus)
+// ============================
+Route::post('/task', [TaskController::class, 'store'])->name('task.store');
+Route::delete('/task/{id}', [TaskController::class, 'destroy'])->name('task.destroy');
+
+// (Opsional jika kamu punya halaman semua task)
+Route::get('/task', [TaskController::class, 'index'])->name('task.index');
