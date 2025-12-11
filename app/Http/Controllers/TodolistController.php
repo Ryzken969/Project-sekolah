@@ -7,61 +7,81 @@ use Illuminate\Http\Request;
 
 class TodolistController extends Controller
 {
-    // ✅ TAMPILKAN SEMUA TODOLIST (HALAMAN DASHBOARD)
+    /**
+     * Tampilkan semua To-do List
+     */
     public function index()
     {
         $todolists = Todolist::latest()->get();
         return view('todolist.index', compact('todolists'));
     }
 
-    // ✅ FORM TAMBAH TODOLIST
+    /**
+     * Form tambah To-do List
+     */
     public function create()
     {
         return view('todolist.create');
     }
 
-    // ✅ SIMPAN TODOLIST BARU
+    /**
+     * Simpan To-do List baru
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'judul'    => 'required',
+            'judul' => 'required',
             'deadline' => 'required|date'
         ]);
 
-        $todolist = Todolist::create($request->all());
+        $todolist = Todolist::create([
+            'judul'    => $request->judul,
+            'deadline' => $request->deadline
+        ]);
 
-        // ✅ SETELAH SIMPAN → LANGSUNG KE DETAIL (SESUAI FLOWCHART)
+        // Setelah simpan → langsung ke halaman detail list
         return redirect()->route('todolist.show', $todolist->id);
     }
 
-    // ✅ DETAIL TODOLIST + TASK
+    /**
+     * Detail To-do List + Task di dalamnya
+     */
     public function show($id)
     {
         $todolist = Todolist::with('tasks')->findOrFail($id);
         return view('todolist.show', compact('todolist'));
     }
 
-    // ✅ FORM EDIT TODOLIST
+    /**
+     * Form edit To-do List
+     */
     public function edit($id)
     {
         $todolist = Todolist::findOrFail($id);
         return view('todolist.edit', compact('todolist'));
     }
 
-    // ✅ UPDATE TODOLIST
+    /**
+     * Update To-do List
+     */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul'    => 'required',
+            'judul' => 'required',
             'deadline' => 'required|date'
         ]);
 
-        Todolist::findOrFail($id)->update($request->all());
+        Todolist::findOrFail($id)->update([
+            'judul'    => $request->judul,
+            'deadline' => $request->deadline
+        ]);
 
         return redirect()->route('todolist.index');
     }
 
-    // ✅ HAPUS TODOLIST
+    /**
+     * Hapus To-do List
+     */
     public function destroy($id)
     {
         Todolist::findOrFail($id)->delete();

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
 
-            // Relasi ke todolists
+            // Relasi ke tabel todolists
             $table->foreignId('todolist_id')
                   ->constrained()
                   ->cascadeOnDelete();

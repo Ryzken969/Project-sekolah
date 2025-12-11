@@ -7,14 +7,18 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    // (OPSIONAL) TAMPILKAN SEMUA TASK JIKA ADA HALAMAN task.index
+    /**
+     * (Opsional) Menampilkan semua tasks
+     */
     public function index()
     {
         $tasks = Task::latest()->get();
         return view('task.index', compact('tasks'));
     }
 
-    // SIMPAN TASK BARU
+    /**
+     * Simpan task baru berdasarkan todolist_id
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -31,11 +35,12 @@ class TaskController extends Controller
         return back()->with('success', 'Task berhasil ditambahkan');
     }
 
-    // HAPUS TASK
+    /**
+     * Hapus task berdasarkan id
+     */
     public function destroy($id)
     {
         Task::findOrFail($id)->delete();
-
         return back()->with('success', 'Task berhasil dihapus');
     }
 }
